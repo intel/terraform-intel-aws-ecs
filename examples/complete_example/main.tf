@@ -28,7 +28,7 @@ locals {
 ################################################################################
 
 module "ecs" {
-  source = "terraform-aws-modules/terraform-aws-ecs"
+  source = "terraform-aws-modules/ecs/aws"
 
   cluster_name = local.name
 
@@ -97,8 +97,7 @@ module "hello_world" {
 }
 #need to test this 
 module "ecs_disabled" {
-  source = "../.."
-
+  source = "terraform-aws-modules/ecs/aws"
   create = false
 }
 
