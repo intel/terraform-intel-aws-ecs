@@ -14,6 +14,9 @@ This file documents the HashiCorp Sentinel policies that apply to this module
 
 Description: The configured "instance_types" should be Intel Xeon 3rd Generation(code-named Ice Lake). At the time of publication of this policy, EKS Managed Node Group do not allow Intel 4th gen Xeon Scalable processors (code named Sapphire Rapids).
 
+NOTE:  need to validate the resource types & which resources are available.    
+
+
 Resource type: aws_eks_managed_node_group
 
 Parameter: instance_types
