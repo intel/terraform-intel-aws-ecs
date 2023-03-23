@@ -3,9 +3,9 @@ provider "aws" {
 }
 
 locals {
-  region = "us-east-1"
-  name   = "ecs-ex-${replace(basename(path.cwd), "_", "-")}"
-  duration = 24
+  region        = "us-east-1"
+  name          = "ecs-ex-${replace(basename(path.cwd), "_", "-")}"
+  duration      = 24
   instance_type = "m6i.2xlarge"
   #instance_type = ["m6i.large", "c6i.large", "m6i.2xlarge", "r6i.large"]
   user_data = <<-EOT
@@ -17,10 +17,10 @@ locals {
   EOT
 
   tags = {
-    owner      = local.name
-    Name       = local.name
-    duration   = local.duration
-    }
+    owner    = local.name
+    Name     = local.name
+    duration = local.duration
+  }
 }
 
 ################################################################################
@@ -115,7 +115,7 @@ module "autoscaling" {
   source  = "terraform-aws-modules/autoscaling/aws"
   version = "~> 6.5"
 
-#Look at what One and Two means below
+  #Look at what One and Two means below
   for_each = {
     one = {
       instance_type = local.instance_type
