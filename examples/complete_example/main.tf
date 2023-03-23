@@ -17,9 +17,9 @@ locals {
   EOT
 
   tags = {
-    owner    = local.name
+    Owner    = local.name
     Name     = local.name
-    duration = local.duration
+    Duration = local.duration
   }
 }
 
