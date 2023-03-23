@@ -3,9 +3,11 @@ provider "aws" {
 }
 
 locals {
-  region = "eu-west-1"
+  region = "us-east-1"
   name   = "ecs-ex-${replace(basename(path.cwd), "_", "-")}"
-
+  duration = 24
+  instance_type = "m6i.2xlarge"
+  #instance_type = ["m6i.large", "c6i.large", "m6i.2xlarge", "r6i.large"]
   user_data = <<-EOT
     #!/bin/bash
     cat <<'EOF' >> /etc/ecs/ecs.config
@@ -15,10 +17,10 @@ locals {
   EOT
 
   tags = {
+    owner      = local.name
     Name       = local.name
-    Example    = local.name
-    Repository = "https://github.com/terraform-aws-modules/terraform-aws-ecs"
-  }
+    duration   = local.duration
+    }
 }
 
 ################################################################################
@@ -26,7 +28,7 @@ locals {
 ################################################################################
 
 module "ecs" {
-  source = "../.."
+  source = "terraform-aws-modules/terraform-aws-ecs"
 
   cluster_name = local.name
 
@@ -87,13 +89,13 @@ module "ecs" {
 
   tags = local.tags
 }
-
+#need to delete
 module "hello_world" {
   source = "./service-hello-world"
 
   cluster_id = module.ecs.cluster_id
 }
-
+#need to test this 
 module "ecs_disabled" {
   source = "../.."
 
@@ -113,12 +115,13 @@ module "autoscaling" {
   source  = "terraform-aws-modules/autoscaling/aws"
   version = "~> 6.5"
 
+#Look at what One and Two means below
   for_each = {
     one = {
-      instance_type = "t3.micro"
+      instance_type = local.instance_type
     }
     two = {
-      instance_type = "t3.small"
+      instance_type = local.instance_type
     }
   }
 
