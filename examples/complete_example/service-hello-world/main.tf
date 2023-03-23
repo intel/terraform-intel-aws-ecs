@@ -16,7 +16,7 @@ resource "aws_ecs_task_definition" "this" {
     "logConfiguration": {
       "logDriver": "awslogs",
       "options": {
-        "awslogs-region": "eu-west-1",
+        "awslogs-region": "us-east-1",
         "awslogs-group": "${aws_cloudwatch_log_group.this.name}",
         "awslogs-stream-prefix": "ec2"
       }
