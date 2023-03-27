@@ -9,21 +9,38 @@
 © Copyright 2022, Intel Corporation
 
 ## Amazon ECS MOdule
+In this module we create a ECS cluster utilizing the latest Intel Architecture available for the AWS ECS Service.  
 
 ## Usage
 
-See examples folder for code ./examples/intel-optimized-postgresql-server/main.tf
+See examples folder for code ./examples/complete_example/main.tf
 
 Example of main.tf
 
 ```hcl
-# Example of how to pass variable for database password:
-# terraform apply -var="db_password=..."
-# Environment variables can also be used https://www.terraform.io/language/values/variables#environment-variables
+provider "aws" {
+  region = local.region
+}
 
-# Provision Intel Cloud Optimization Module
-module "module-example" {
-  source = "github.com/intel/module-name"
+locals {
+  region        = "us-east-1"
+  name          = "ecs-ex-${replace(basename(path.cwd), "_", "-")}"
+  duration      = 24
+  instance_type = "m6i.large"
+  #instance_type = ["m6i.large", "c6i.large", "m6i.2xlarge", "r6i.large"]
+  user_data = <<-EOT
+    #!/bin/bash
+    cat <<'EOF' >> /etc/ecs/ecs.config
+    ECS_CLUSTER=${local.name}
+    ECS_LOGLEVEL=debug
+    EOF
+  EOT
+
+  tags = {
+    Owner    = local.name
+    Name     = local.name
+    Duration = local.duration
+  }
 }
 
 ```

@@ -4,8 +4,8 @@ Configuration in this directory creates:
 
 - ECS cluster using autoscaling group capacity provider
 - Autoscaling groups with IAM instance profile to be used by ECS cluster
-- Example ECS service
 - creates VPC using module below 
+- Utilizes the latest Intel Architecture (IceLake)
 
 ## Usage
 
