@@ -6,7 +6,7 @@ locals {
   region        = "us-east-1"
   name          = "ecs-ex-${replace(basename(path.cwd), "_", "-")}"
   duration      = 24
-  instance_type = "m6i.2xlarge"
+  instance_type = "m6i.large"
   #instance_type = ["m6i.large", "c6i.large", "m6i.2xlarge", "r6i.large"]
   user_data = <<-EOT
     #!/bin/bash
@@ -89,13 +89,8 @@ module "ecs" {
 
   tags = local.tags
 }
-#need to delete
-module "hello_world" {
-  source = "./service-hello-world"
 
-  cluster_id = module.ecs.cluster_id
-}
-#need to test this 
+#need to test this
 module "ecs_disabled" {
   source = "terraform-aws-modules/ecs/aws"
   create = false
@@ -126,7 +121,7 @@ module "autoscaling" {
 
   name = "${local.name}-${each.key}"
 
-  
+
   image_id      = jsondecode(data.aws_ssm_parameter.ecs_optimized_ami.value)["image_id"]
   instance_type = each.value.instance_type
 

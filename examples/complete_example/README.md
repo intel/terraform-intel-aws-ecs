@@ -41,7 +41,6 @@ Note that this example may create resources which will incur monetary charges on
 | <a name="module_autoscaling_sg"></a> [autoscaling\_sg](#module\_autoscaling\_sg) | terraform-aws-modules/security-group/aws | ~> 4.0 |
 | <a name="module_ecs"></a> [ecs](#module\_ecs) | ../.. | n/a |
 | <a name="module_ecs_disabled"></a> [ecs\_disabled](#module\_ecs\_disabled) | ../.. | n/a |
-| <a name="module_hello_world"></a> [hello\_world](#module\_hello\_world) | ./service-hello-world | n/a |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-aws-modules/vpc/aws | ~> 3.0 |
 
 ## Resources
