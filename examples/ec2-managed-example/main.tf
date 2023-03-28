@@ -5,15 +5,16 @@
 ########################
 ####     Intel      ####
 ########################
-
-#policy block here for AWS
+# **Compute Optimized:** c6i.xlarge, c6i.2xlarge, c6i.4xlarge, c6i.8xlarge, c6i.12xlarge, c6i.16xlarge, c6i.24xlarge, c6i.32xlarge, c6i.metal, c6in.large, c6in.xlarge, c6in.2xlarge, c6in.4xlarge, c6in.8xlarge, c6in.12xlarge, c6in.16xlarge, c6in.24xlarge, c6in.32xlarge c6in.metal, c6id.large, c6id.xlarge, c6id.2xlarge, c6id.4xlarge, c6id.8xlarge, c6id.12xlarge, c6id.16xlarge, c6id.24xlarge, c6id.32xlarge c6id.metal, hpc6id.32.xlarge
+# **Memory Optimized:** r6i.large, r6i.xlarge, r6i.2xlarge, r6i.4xlarge, r6i.8xlarge, r6i.12xlarge, r6i.16xlarge, r6i.24xlarge, r6i.32xlarge, r6i.metal, r6in.large, r6in.xlarge, r6in.2xlarge, r6in.4xlarge, r6in.8xlarge, r6in.12xlarge, r6in.16xlarge, r6in.24xlarge, r6in.32xlarge, r6in.metal, r6idn.large, r6idn.xlarge, r6idn.2xlarge, r6idn.4xlarge, r6idn.8xlarge, r6idn.12xlarge, r6idn.16xlarge, r6idn.24xlarge, r6idn.32xlarge, r6idn.metal
+# **HighMem/vCPU Ratio:** x2iedn.xlarge, x2iedn.2xlarge, r6i.4xlarge, x2iedn.8xlarge, x2iedn.16xlarge, x2iedn.24xlarge, x2iedn.32xlarge, x2iedn.metal
+# **Storage Optimized:** i4i.large, i4i.xlarge, i4i.2xlarge, i4i.4xlarge, i4i.8xlarge, i4i.16xlarge, i4i.32xlarge, i4i.metal
 
 locals {
-# See above recommended instance types for Intel Xeon 3rd Generation Scalable processors (code-named Ice Lake)
   region        = "us-east-1"
   name          = "cluster-prod-demo-app"
   instance_type = "m6i.large"
-  #instance_type = ["m6i.large", "c6i.large", "m6i.2xlarge", "r6i.large"]
+# See above recommended instance types for Intel Xeon 3rd Generation Scalable processors (code-named Ice Lake)
   user_data = <<-EOT
     #!/bin/bash
     cat <<'EOF' >> /etc/ecs/ecs.config
@@ -42,6 +43,7 @@ resource "random_id" "prefix" {
 
 module "ecs" {
   source = "terraform-aws-modules/ecs/aws"
+  version = "4.1.3"
 
   cluster_name = "local.name-${random_id.prefix.hex}"
 
@@ -148,12 +150,12 @@ module "autoscaling" {
     AmazonEC2ContainerServiceforEC2Role = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
     AmazonSSMManagedInstanceCore        = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   }
-
+# Adjust min/max/desired_capacity based on your application needs
   vpc_zone_identifier = module.vpc.private_subnets
   health_check_type   = "EC2"
-  min_size            = 0   #review BKM
-  max_size            = 2   #review BKM's for ECS clusters
-  desired_capacity    = 1
+  min_size            = 2
+  max_size            = 10
+  desired_capacity    = 2
 
   # https://github.com/hashicorp/terraform-provider-aws/issues/12582
   autoscaling_group_tags = {

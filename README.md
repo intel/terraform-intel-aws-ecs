@@ -13,21 +13,16 @@ In this module we create a ECS cluster utilizing the latest Intel Architecture a
 
 ## Usage
 
-See examples folder for code ./examples/complete_example/main.tf
+See examples folder for code ./examples/ec2-managed-example/main.tf
 
 Example of main.tf
 
 ```hcl
-provider "aws" {
-  region = local.region
-}
-
 locals {
   region        = "us-east-1"
-  name          = "ecs-ex-${replace(basename(path.cwd), "_", "-")}"
-  duration      = 24
+  name          = "cluster-prod-demo-app"
   instance_type = "m6i.large"
-  #instance_type = ["m6i.large", "c6i.large", "m6i.2xlarge", "r6i.large"]
+# See above recommended instance types for Intel Xeon 3rd Generation Scalable processors (code-named Ice Lake)
   user_data = <<-EOT
     #!/bin/bash
     cat <<'EOF' >> /etc/ecs/ecs.config
@@ -37,12 +32,10 @@ locals {
   EOT
 
   tags = {
-    Owner    = local.name
-    Name     = local.name
-    Duration = local.duration
+    Owner    = "user@company.com"
+    Duration = "24"
   }
 }
-
 ```
 
 Run Terraform

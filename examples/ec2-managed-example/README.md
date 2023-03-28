@@ -9,7 +9,30 @@ Configuration in this directory creates:
 
 ## Usage
 
+Example of main.tf
+
+```hcl
+locals {
+  region        = "us-east-1"
+  name          = "cluster-prod-demo-app"
+  instance_type = "m6i.large"
+# See above recommended instance types for Intel Xeon 3rd Generation Scalable processors (code-named Ice Lake)
+  user_data = <<-EOT
+    #!/bin/bash
+    cat <<'EOF' >> /etc/ecs/ecs.config
+    ECS_CLUSTER=${local.name}
+    ECS_LOGLEVEL=debug
+    EOF
+  EOT
+
+  tags = {
+    Owner    = "user@company.com"
+    Duration = "24"
+  }
+}
+```
 To run this example you need to execute:
+
 
 ```bash
 $ terraform init
