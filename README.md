@@ -8,12 +8,20 @@
 
 © Copyright 2022, Intel Corporation
 
-## Amazon ECS MOdule
+## Amazon ECS Module
 In this module we create a ECS cluster utilizing the latest Intel Architecture available for the AWS ECS Service.  
 
 ## Usage
 
 See examples folder for code ./examples/ec2-managed-example/main.tf
+
+This example module will create the following:
+* VPC in the desired region with 3 subnets in 3 Availablity zones.
+* Cloudwatch Log Group
+* Creates 2 EC2 AutoScaling Groups
+* EC2 instances per AutoScaling Group (ajust your min/max/desired)
+* ECS Cluster with all EC2 instances as Container instances
+
 
 ### Instance Types
 - **General:** m6i.large, m6i.xlarge, m6i.2xlarge, m6i.4xlarge, m6i.8xlarge, m6i.12xlarge, m6i.16xlarge, m6i.24xlarge, m6i.32xlarge, m6i.metal, m6in.large, m6in.xlarge, m6in.2xlarge, m6in.4xlarge, m6in.8xlarge, m6in.12xlarge, m6in.16xlarge, m6in.24xlarge, m6in.32xlarge m6in.metal, m6id.large, m6id.xlarge, m6id.2xlarge, m6id.4xlarge, m6id.8xlarge, m6id.12xlarge, m6id.16xlarge, m6id.24xlarge, m6id.32xlarge m6id.metal, m6idn.large, m6idn.xlarge, m6idn.2xlarge, m6idn.4xlarge, m6idn.8xlarge, m6idn.12xlarge, m6idn.16xlarge, m6idn.24xlarge, m6idn.32xlarge m6idn.metal
