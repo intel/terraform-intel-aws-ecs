@@ -37,15 +37,11 @@ locals {
 # ECS Module
 ################################################################################
 
-resource "random_id" "prefix" {
-  byte_length = 8
-}
-
 module "ecs" {
   source = "terraform-aws-modules/ecs/aws"
   version = "4.1.3"
 
-  cluster_name = "local.name-${random_id.prefix.hex}"
+  cluster_name = local.name
 
   cluster_configuration = {
     execute_command_configuration = {
