@@ -8,9 +8,8 @@
 
 #policy block here for AWS
 
-
 locals {
-  # See above recommended instance types for Intel Xeon 3rd Generation Scalable processors (code-named Ice Lake)
+# See above recommended instance types for Intel Xeon 3rd Generation Scalable processors (code-named Ice Lake)
   region        = "us-east-1"
   name          = "cluster-prod-demo-app"
   instance_type = "m6i.large"
@@ -152,8 +151,8 @@ module "autoscaling" {
 
   vpc_zone_identifier = module.vpc.private_subnets
   health_check_type   = "EC2"
-  min_size            = 0
-  max_size            = 2
+  min_size            = 0   #review BKM
+  max_size            = 2   #review BKM's for ECS clusters
   desired_capacity    = 1
 
   # https://github.com/hashicorp/terraform-provider-aws/issues/12582
