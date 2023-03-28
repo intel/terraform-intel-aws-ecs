@@ -13,7 +13,7 @@
 
 locals {
   region        = "us-east-1"
-  name          = "cluster-prod-demo-app"
+  name          = "cluster-prod"
   instance_type = "m6i.large"
 # See above recommended instance types for Intel Xeon 3rd Generation Scalable processors (code-named Ice Lake)
   user_data = <<-EOT
@@ -66,8 +66,8 @@ module "ecs" {
 
   # Capacity provider - autoscaling groups
   autoscaling_capacity_providers = {
-    one = {
-      auto_scaling_group_arn         = module.autoscaling["one"].autoscaling_group_arn
+    asg1 = {
+      auto_scaling_group_arn         = module.autoscaling["asg1"].autoscaling_group_arn
       managed_termination_protection = "ENABLED"
 
       managed_scaling = {
@@ -82,8 +82,8 @@ module "ecs" {
         base   = 20
       }
     }
-    two = {
-      auto_scaling_group_arn         = module.autoscaling["two"].autoscaling_group_arn
+    asg2 = {
+      auto_scaling_group_arn         = module.autoscaling["asg2"].autoscaling_group_arn
       managed_termination_protection = "ENABLED"
 
       managed_scaling = {
@@ -122,10 +122,10 @@ module "autoscaling" {
 
   #Look at what One and Two means below
   for_each = {
-    one = {
+    asg1 = {
       instance_type = local.instance_type
     }
-    two = {
+    asg2 = {
       instance_type = local.instance_type
     }
   }
