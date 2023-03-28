@@ -1,11 +1,18 @@
-provider "aws" {
-  region = local.region
-}
+#########################################################
+# Local variables, modify for your needs                #
+#########################################################
+
+########################
+####     Intel      ####
+########################
+
+#policy block here for AWS
+
 
 locals {
+  # See above recommended instance types for Intel Xeon 3rd Generation Scalable processors (code-named Ice Lake)
   region        = "us-east-1"
-  name          = "ecs-ex-${replace(basename(path.cwd), "_", "-")}"
-  duration      = 24
+  name          = "cluster-prod-demo-app"
   instance_type = "m6i.large"
   #instance_type = ["m6i.large", "c6i.large", "m6i.2xlarge", "r6i.large"]
   user_data = <<-EOT
@@ -17,20 +24,27 @@ locals {
   EOT
 
   tags = {
-    Owner    = local.name
-    Name     = local.name
-    Duration = local.duration
+    Owner    = "user@company.com"
+    Duration = "24"
   }
 }
+
+#########################################################
+# End of local variables                                #
+#########################################################
 
 ################################################################################
 # ECS Module
 ################################################################################
 
+resource "random_id" "prefix" {
+  byte_length = 8
+}
+
 module "ecs" {
   source = "terraform-aws-modules/ecs/aws"
 
-  cluster_name = local.name
+  cluster_name = "local.name-${random_id.prefix.hex}"
 
   cluster_configuration = {
     execute_command_configuration = {
