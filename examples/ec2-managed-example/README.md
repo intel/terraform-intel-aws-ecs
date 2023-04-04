@@ -4,7 +4,7 @@ Configuration in this directory creates:
 
 - ECS cluster using autoscaling group capacity provider
 - Autoscaling groups with IAM instance profile to be used by ECS cluster
-- creates VPC using module below 
+- creates VPC using module below (3 AZ's)
 - Utilizes the latest Intel Architecture (IceLake)
 
 ## Usage
@@ -23,8 +23,7 @@ Example of main.tf
 locals {
   region        = "us-east-1"
   name          = "cluster-prod"
-  instance_type = "m6i.large"
-# See above recommended instance types for Intel Xeon 3rd Generation Scalable processors (code-named Ice Lake)
+  instance_type = "m6i.large" # See above recommended instance types for Intel Xeon 3rd Generation Scalable processors (code-named Ice Lake)
   user_data = <<-EOT
     #!/bin/bash
     cat <<'EOF' >> /etc/ecs/ecs.config

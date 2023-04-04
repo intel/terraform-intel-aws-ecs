@@ -4,8 +4,13 @@ Configuration in this directory creates:
 
 - ECS cluster using autoscaling group capacity provider
 - Autoscaling groups with IAM instance profile to be used by ECS cluster
-- Asks for your VPC ID to build the Cluster in.
 - Utilizes the latest Intel Architecture (IceLake)
+- Requires that you provide VPC information
+- **VPC ID "vpc-0123abdd"**
+- **3 Availability Zones, public and private subnet in each Zone**
+- **public_subnets  = ["subnet-azoneA", "subnet-azoneB", "subnet-azoneC"] #Specify your 3 seperate public subnets in 3 different AZ's**
+- **private_subnets = ["subnet-azoneA", "subnet-azoneB", "subnet-azoneC"] #Specify your 3 seperate private subnets in 3 different AZ's**
+
 
 ## Usage
 ### Instance Types
@@ -23,8 +28,11 @@ Example of main.tf
 locals {
   region        = "us-east-1"
   name          = "cluster-prod"
-  instance_type = "m6i.large"
-# See above recommended instance types for Intel Xeon 3rd Generation Scalable processors (code-named Ice Lake)
+  instance_type = "m6i.large" # See above recommended instance types for Intel Xeon 3rd Generation Scalable processors (code-named Ice Lake)
+  vpc_id          = "vpc-0336e123e" #Specify your VPC ID
+  public_subnets  = ["subnet-00adfaadf", "subnet-0323434", "subnet-0dfdacfg0"] #Specify your 3 seperate public subnets in 3 different AZ's
+  private_subnets = ["subnet-0dfad334", "subnet-009fdfd45454", "subnet-fdfd43454"] #Specify your 3 seperate private subnets in 3 different AZ's
+
   user_data = <<-EOT
     #!/bin/bash
     cat <<'EOF' >> /etc/ecs/ecs.config

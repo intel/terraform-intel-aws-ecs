@@ -12,12 +12,13 @@
 # **Storage Optimized:** i4i.large, i4i.xlarge, i4i.2xlarge, i4i.4xlarge, i4i.8xlarge, i4i.16xlarge, i4i.32xlarge, i4i.metal
 
 locals {
-  region        = "us-east-1"
-  name          = "cluster-prod"
-  instance_type = "m6i.large"
-# See above recommended instance types for Intel Xeon 3rd Generation Scalable processors (code-named Ice Lake)
-vpc_id = "<YOUR-VPC-ID-HERE>"
-  user_data = <<-EOT
+  region          = "us-east-1"
+  name            = "cluster-prod"                                                                       # Name of your Cluster
+  instance_type   = "m6i.large"                                                                          # See above recommended instance types for Intel Xeon 3rd Generation Scalable processors (code-named Ice Lake)
+  vpc_id          = "vpc-09120dcc5f12e9d63"                                                              #Specify your VPC ID
+  public_subnets  = ["subnet-02ab227c270389bec", "subnet-0b79f4c1503cddb83", "subnet-03dbd95b42c4d148e"] #Specify your 3 seperate public subnets in 3 different AZ's
+  private_subnets = ["subnet-0f67b7357121a82e9", "subnet-0b1956a573ce061d1", "subnet-07e0170e56595d368"] #Specify your 3 seperate private subnets in 3 different AZ's
+  user_data       = <<-EOT
     #!/bin/bash
     cat <<'EOF' >> /etc/ecs/ecs.config
     ECS_CLUSTER=${local.name}
@@ -40,7 +41,7 @@ vpc_id = "<YOUR-VPC-ID-HERE>"
 ################################################################################
 
 module "ecs" {
-  source = "terraform-aws-modules/ecs/aws"
+  source  = "terraform-aws-modules/ecs/aws"
   version = "4.1.3"
 
   cluster_name = local.name
@@ -121,7 +122,7 @@ module "autoscaling" {
   source  = "terraform-aws-modules/autoscaling/aws"
   version = "~> 6.5"
 
-  #Look at what One and Two means below
+  #Creates Auto Scaling Groups
   for_each = {
     asg1 = {
       instance_type = local.instance_type
@@ -148,8 +149,8 @@ module "autoscaling" {
     AmazonEC2ContainerServiceforEC2Role = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
     AmazonSSMManagedInstanceCore        = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   }
-# Adjust min/max/desired_capacity based on your application needs
-  vpc_zone_identifier = module.vpc.private_subnets
+  # Adjust min/max/desired_capacity based on your application needs
+  vpc_zone_identifier = local.private_subnets
   health_check_type   = "EC2"
   min_size            = 2
   max_size            = 10
@@ -182,24 +183,26 @@ module "autoscaling_sg" {
   tags = local.tags
 }
 
-# module "vpc" {
-#   source  = "terraform-aws-modules/vpc/aws"
+
+#module "vpc" {
+#  vpc_id = local.vpc_id
+#  source = "../../"
 #   version = "~> 3.0"
-# 
-# name = local.name
-# cidr = "10.99.0.0/18"
-# 
-# azs             = ["${local.region}a", "${local.region}b", "${local.region}c"]
-# public_subnets  = ["10.99.0.0/24", "10.99.1.0/24", "10.99.2.0/24"]
-# private_subnets = ["10.99.3.0/24", "10.99.4.0/24", "10.99.5.0/24"]
-# 
+
+#   name = local.name
+#   cidr = "10.99.0.0/18"
+
+#   azs             = ["${local.region}a", "${local.region}b", "${local.region}c"]
+#public_subnets  = local.public_subnets
+#private_subnets = local.private_subnets
+
 #   enable_nat_gateway      = true
 #   single_nat_gateway      = true
 #   enable_dns_hostnames    = true
 #   map_public_ip_on_launch = false
-# 
+
 #   tags = local.tags
-# }
+#}
 
 resource "aws_cloudwatch_log_group" "this" {
   name              = "/aws/ecs/${local.name}"
