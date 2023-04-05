@@ -14,7 +14,8 @@
 locals {
   region        = "us-east-1"
   name          = "cluster-prod"
-  instance_type = "m6i.large" # See above recommended instance types for Intel Xeon 3rd Generation Scalable processors (code-named Ice Lake)
+  instance_type = "m6i.large"
+# See above recommended instance types for Intel Xeon 3rd Generation Scalable processors (code-named Ice Lake)
   user_data = <<-EOT
     #!/bin/bash
     cat <<'EOF' >> /etc/ecs/ecs.config
