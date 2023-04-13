@@ -184,26 +184,6 @@ module "autoscaling_sg" {
 }
 
 
-#module "vpc" {
-#  vpc_id = local.vpc_id
-#  source = "../../"
-#   version = "~> 3.0"
-
-#   name = local.name
-#   cidr = "10.99.0.0/18"
-
-#   azs             = ["${local.region}a", "${local.region}b", "${local.region}c"]
-#public_subnets  = local.public_subnets
-#private_subnets = local.private_subnets
-
-#   enable_nat_gateway      = true
-#   single_nat_gateway      = true
-#   enable_dns_hostnames    = true
-#   map_public_ip_on_launch = false
-
-#   tags = local.tags
-#}
-
 resource "aws_cloudwatch_log_group" "this" {
   name              = "/aws/ecs/${local.name}"
   retention_in_days = 7
