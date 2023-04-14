@@ -1,59 +1,77 @@
-# ECS Cluster w/ EC2 Autoscaling
+<p align="center">
+  <img src="https://github.com/intel/terraform-intel-aws-ecs/blob/main/images/logo-classicblue-800px.png?raw=true" alt="Intel Logo" width="250"/>
+</p>
 
-Configuration in this directory creates:
+# Intel® Cloud Optimization Modules for Terraform
+
+© Copyright 2022, Intel Corporation
+
+## AWS Elastic Container Service module - Existing VPC Example
+
+This example creates an Amazon Elastic Container Service Cluster based on Intel and creates allows you to select your vpc. This module leverages the m6i.large by default which is the latest Intel Xeon processor available at the time of this module publication. 
+
+As you configure your application's environment, choose the configurations for your infrastructure that matches your application's requirements.
+
+## Usage
+This module builds using recommended settings:
 
 - ECS cluster using autoscaling group capacity provider
 - Autoscaling groups with IAM instance profile to be used by ECS cluster
 - Utilizes the latest Intel Architecture (IceLake)
-- Requires that you provide VPC information
-- **VPC ID "vpc-0123abdd"**
-- **3 Availability Zones, public and private subnet in each Zone**
-- **public_subnets  = ["subnet-azoneA", "subnet-azoneB", "subnet-azoneC"] #Specify your 3 seperate public subnets in 3 different AZ's**
-- **private_subnets = ["subnet-azoneA", "subnet-azoneB", "subnet-azoneC"] #Specify your 3 seperate private subnets in 3 different AZ's**
 
-
-## Usage
-### Instance Types
-- **General:** m6i.large, m6i.xlarge, m6i.2xlarge, m6i.4xlarge, m6i.8xlarge, m6i.12xlarge, m6i.16xlarge, m6i.24xlarge, m6i.32xlarge, m6i.metal, m6in.large, m6in.xlarge, m6in.2xlarge, m6in.4xlarge, m6in.8xlarge, m6in.12xlarge, m6in.16xlarge, m6in.24xlarge, m6in.32xlarge m6in.metal, m6id.large, m6id.xlarge, m6id.2xlarge, m6id.4xlarge, m6id.8xlarge, m6id.12xlarge, m6id.16xlarge, m6id.24xlarge, m6id.32xlarge m6id.metal, m6idn.large, m6idn.xlarge, m6idn.2xlarge, m6idn.4xlarge, m6idn.8xlarge, m6idn.12xlarge, m6idn.16xlarge, m6idn.24xlarge, m6idn.32xlarge m6idn.metal
-- **Compute Optimized:** c6i.large, c6i.xlarge, c6i.2xlarge, c6i.4xlarge, c6i.8xlarge, c6i.12xlarge, c6i.16xlarge, c6i.24xlarge, c6i.32xlarge, c6i.metal, c6in.large, c6in.xlarge, c6in.2xlarge, c6in.4xlarge, c6in.8xlarge, c6in.12xlarge, c6in.16xlarge, c6in.24xlarge, c6in.32xlarge c6in.metal, c6id.large, c6id.xlarge, c6id.2xlarge, c6id.4xlarge, c6id.8xlarge, c6id.12xlarge, c6id.16xlarge, c6id.24xlarge, c6id.32xlarge c6id.metal, hpc6id.32.xlarge
-- **Memory Optimized:** r6i.large, r6i.xlarge, r6i.2xlarge, r6i.4xlarge, r6i.8xlarge, r6i.12xlarge, r6i.16xlarge, r6i.24xlarge, r6i.32xlarge, r6i.metal, r6in.large, r6in.xlarge, r6in.2xlarge, r6in.4xlarge, r6in.8xlarge, r6in.12xlarge, r6in.16xlarge, r6in.24xlarge, r6in.32xlarge, r6in.metal, r6idn.large, r6idn.xlarge, r6idn.2xlarge, r6idn.4xlarge, r6idn.8xlarge, r6idn.12xlarge, r6idn.16xlarge, r6idn.24xlarge, r6idn.32xlarge, r6idn.metal
-- **HighMem/vCPU Ratio:** x2iedn.xlarge, x2iedn.2xlarge, r6i.4xlarge, x2iedn.8xlarge, x2iedn.16xlarge, x2iedn.24xlarge, x2iedn.32xlarge, x2iedn.metal
-- **Storage Optimized:** i4i.large, i4i.xlarge, i4i.2xlarge, i4i.4xlarge, i4i.8xlarge, i4i.16xlarge, i4i.32xlarge, i4i.metal
-
-**Choose your region, cluster name, desired instance type in the main.tf**
-
-Example of main.tf
-
+By default, you will only have to pass these variables in the **/examples/ec2-managed-novpc/main.tf** file
+```hcl
+AWS region
+Name of the cluster
+Intel Instance size
+VPC ID you want to use
+Public and private Subnets in 3 Availability Zones of your VPC
+Any tags you wish to have applied
+```
 ```hcl
 locals {
-  region        = "us-east-1"
-  name          = "cluster-prod"
-  instance_type = "m6i.large" # See above recommended instance types for Intel Xeon 3rd Generation Scalable processors (code-named Ice Lake)
-  vpc_id          = "vpc-0336e123e" #Specify your VPC ID
-  public_subnets  = ["subnet-00adfaadf", "subnet-0323434", "subnet-0dfdacfg0"] #Specify your 3 seperate public subnets in 3 different AZ's
-  private_subnets = ["subnet-0dfad334", "subnet-009fdfd45454", "subnet-fdfd43454"] #Specify your 3 seperate private subnets in 3 different AZ's
-
-  user_data = <<-EOT
+  region          = "us-east-1"
+  name            = "cluster-prod"                                                                       
+  instance_type   = "m6i.large"  
+  vpc_id          = "vpc-0123abcd"  
+  public_subnets  = ["subnet-0123zoneA", "subnet-0123zoneB", "subnet-0123zoneC"]
+  private_subnets = ["subnet-abcdzoneA", "subnet-abcdzoneB", "subnet-abcdzoneC"]
+ 
+   user_data = <<-EOT
     #!/bin/bash
     cat <<'EOF' >> /etc/ecs/ecs.config
     ECS_CLUSTER=${local.name}
     ECS_LOGLEVEL=debug
     EOF
   EOT
-
+ 
   tags = {
     Owner    = "user@company.com"
     Duration = "24"
   }
 }
 ```
+
+### Instance Types
+**General**: m6i.large, m6i.xlarge, m6i.2xlarge, m6i.4xlarge, m6i.8xlarge, m6i.12xlarge, m6i.16xlarge, m6i.24xlarge, m6i.32xlarge, m6i.metal, m6in.large, m6in.xlarge, m6in.2xlarge, m6in.4xlarge, m6in.8xlarge, m6in.12xlarge, m6in.16xlarge, m6in.24xlarge, m6in.32xlarge m6in.metal, m6id.large, m6id.xlarge, m6id.2xlarge, m6id.4xlarge, m6id.8xlarge, m6id.12xlarge, m6id.16xlarge, m6id.24xlarge, m6id.32xlarge m6id.metal, m6idn.large, m6idn.xlarge, m6idn.2xlarge, m6idn.4xlarge, m6idn.8xlarge, m6idn.12xlarge, m6idn.16xlarge, m6idn.24xlarge, m6idn.32xlarge m6idn.metal
+
+**Compute Optimized:** c6i.large, c6i.xlarge, c6i.2xlarge, c6i.4xlarge, c6i.8xlarge, c6i.12xlarge, c6i.16xlarge, c6i.24xlarge, c6i.32xlarge, c6i.metal, c6in.large, c6in.xlarge, c6in.2xlarge, c6in.4xlarge, c6in.8xlarge, c6in.12xlarge, c6in.16xlarge, c6in.24xlarge, c6in.32xlarge c6in.metal, c6id.large, c6id.xlarge, c6id.2xlarge, c6id.4xlarge, c6id.8xlarge, c6id.12xlarge, c6id.16xlarge, c6id.24xlarge, c6id.32xlarge c6id.metal, hpc6id.32.xlarge
+
+**Memory Optimized:** r6i.large, r6i.xlarge, r6i.2xlarge, r6i.4xlarge, r6i.8xlarge, r6i.12xlarge, r6i.16xlarge, r6i.24xlarge, r6i.32xlarge, r6i.metal, r6in.large, r6in.xlarge, r6in.2xlarge, r6in.4xlarge, r6in.8xlarge, r6in.12xlarge, r6in.16xlarge, r6in.24xlarge, r6in.32xlarge, r6in.metal, r6idn.large, r6idn.xlarge, r6idn.2xlarge, r6idn.4xlarge, r6idn.8xlarge, r6idn.12xlarge, r6idn.16xlarge, r6idn.24xlarge, r6idn.32xlarge, r6idn.metal
+
+**HighMem/vCPU Ratio:** x2iedn.xlarge, x2iedn.2xlarge, r6i.4xlarge, x2iedn.8xlarge, x2iedn.16xlarge, x2iedn.24xlarge, x2iedn.32xlarge, x2iedn.metal
+
+**Storage Optimized:** i4i.large, i4i.xlarge, i4i.2xlarge, i4i.4xlarge, i4i.8xlarge, i4i.16xlarge, i4i.32xlarge, i4i.metal
+
+
+
 To run this example you need to execute:
 
 
-```bash
-$ terraform init
-$ terraform plan
-$ terraform apply
+```
+terraform init
+terraform plan
+terraform apply
 ```
 
 Note that this example may create resources which will incur monetary charges on your AWS bill. Run `terraform destroy` when you no longer need these resources.
