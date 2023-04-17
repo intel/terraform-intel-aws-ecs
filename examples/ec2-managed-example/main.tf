@@ -15,7 +15,7 @@ locals {
   region        = "us-east-1"
   name          = "cluster-prod"
   instance_type = "m6i.large"
-# See above recommended instance types for Intel Xeon 3rd Generation Scalable processors (code-named Ice Lake)
+  # See above recommended instance types for Intel Xeon 3rd Generation Scalable processors (code-named Ice Lake)
   user_data = <<-EOT
     #!/bin/bash
     cat <<'EOF' >> /etc/ecs/ecs.config
@@ -39,7 +39,7 @@ locals {
 ################################################################################
 
 module "ecs" {
-  source = "terraform-aws-modules/ecs/aws"
+  source  = "terraform-aws-modules/ecs/aws"
   version = "4.1.3"
 
   cluster_name = local.name
@@ -147,7 +147,7 @@ module "autoscaling" {
     AmazonEC2ContainerServiceforEC2Role = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
     AmazonSSMManagedInstanceCore        = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   }
-# Adjust min/max/desired_capacity based on your application needs
+  # Adjust min/max/desired_capacity based on your application needs
   vpc_zone_identifier = module.vpc.private_subnets
   health_check_type   = "EC2"
   min_size            = 2
