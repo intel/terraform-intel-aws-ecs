@@ -15,9 +15,9 @@ locals {
   region          = "us-east-1"
   name            = "cluster-prod"                                                                       # Name of your Cluster
   instance_type   = "m6i.large"                                                                          # See above recommended instance types for Intel Xeon 3rd Generation Scalable processors (code-named Ice Lake)
-  vpc_id          = "vpc-01234abcd"                                                              #Specify your VPC ID
-  public_subnets  = ["subnet-01234abcdzoneA", "subnet-01234abcdzoneB", "subnet-01234abcdzoneC"] #Specify your 3 seperate public subnets in 3 different AZ's
-  private_subnets = ["subnet-5678abcdzoneA", "subnet-5678abcdzoneB", "subnet-5678abcdzoneC"] #Specify your 3 seperate private subnets in 3 different AZ's
+  vpc_id          = "<YOUR-VPC-ID-HERE>"                                                                 #Specify your VPC ID
+  public_subnets  = ["<YOUR-subnet-zoneA>", "<YOUR-subnet-zoneB>", "<YOUR-subnet-zoneC>"] #Specify your 3 seperate public subnets in 3 different AZ's
+  private_subnets = ["<YOUR-subnet-zoneA>", "<YOUR-subnet-zoneB>", "<YOUR-subnet-zoneC>"] #Specify your 3 seperate private subnets in 3 different AZ's
   user_data       = <<-EOT
     #!/bin/bash
     cat <<'EOF' >> /etc/ecs/ecs.config
