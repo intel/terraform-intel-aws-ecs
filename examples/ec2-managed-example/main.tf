@@ -102,11 +102,6 @@ module "ecs" {
   tags = local.tags
 }
 
-module "ecs_disabled" {
-  source = "terraform-aws-modules/ecs/aws"
-  create = false
-}
-
 ################################################################################
 # Supporting Resources
 ################################################################################
@@ -120,7 +115,7 @@ module "autoscaling" {
   source  = "terraform-aws-modules/autoscaling/aws"
   version = "~> 6.5"
 
-  #Look at what One and Two means below
+  #AutoScaling group names
   for_each = {
     asg1 = {
       instance_type = local.instance_type
