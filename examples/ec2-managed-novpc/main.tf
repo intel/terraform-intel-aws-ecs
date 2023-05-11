@@ -104,11 +104,6 @@ module "ecs" {
   tags = local.tags
 }
 
-module "ecs_disabled" {
-  source = "terraform-aws-modules/ecs/aws"
-  create = false
-}
-
 ################################################################################
 # Supporting Resources
 ################################################################################
