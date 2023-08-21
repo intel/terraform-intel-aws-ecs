@@ -8,7 +8,7 @@
 
 ## AWS Elastic Container Service module - Create New VPC Example
 
-This example creates an Amazon Elastic Container Service Cluster based on Intel and creates a brand new vpc. This module leverages the m6i.large by default which is the latest Intel Xeon processor available at the time of this module publication. 
+This example creates an Amazon Elastic Container Service Cluster based on Intel and creates a brand new vpc. This module leverages the m7i.large by default which is the latest Intel Xeon processor available at the time of this module publication. 
 
 As you configure your application's environment, choose the configurations for your infrastructure that matches your application's requirements.
 
@@ -23,18 +23,18 @@ Any tags you wish to have applied
 ```
 ```hcl
 locals {
-  region          = "us-east-1"
-  name            = "cluster-prod"                                                                       
-  instance_type   = "m6i.large"  
- 
-   user_data = <<-EOT
+  region        = "us-east-1"
+  name          = "cluster-prod"
+  instance_type = "m7i.large"
+  # See above recommended instance types for Intel Xeon 4th Generation Scalable processors (code-named Sapphire Rapids)
+  user_data = <<-EOT
     #!/bin/bash
     cat <<'EOF' >> /etc/ecs/ecs.config
     ECS_CLUSTER=${local.name}
     ECS_LOGLEVEL=debug
     EOF
   EOT
- 
+
   tags = {
     Owner    = "user@company.com"
     Duration = "24"
@@ -44,7 +44,7 @@ locals {
 
 
 ### Instance Types
-**General**: m6i.large, m6i.xlarge, m6i.2xlarge, m6i.4xlarge, m6i.8xlarge, m6i.12xlarge, m6i.16xlarge, m6i.24xlarge, m6i.32xlarge, m6i.metal, m6in.large, m6in.xlarge, m6in.2xlarge, m6in.4xlarge, m6in.8xlarge, m6in.12xlarge, m6in.16xlarge, m6in.24xlarge, m6in.32xlarge m6in.metal, m6id.large, m6id.xlarge, m6id.2xlarge, m6id.4xlarge, m6id.8xlarge, m6id.12xlarge, m6id.16xlarge, m6id.24xlarge, m6id.32xlarge m6id.metal, m6idn.large, m6idn.xlarge, m6idn.2xlarge, m6idn.4xlarge, m6idn.8xlarge, m6idn.12xlarge, m6idn.16xlarge, m6idn.24xlarge, m6idn.32xlarge m6idn.metal
+**General**: m7i.large, m7i.xlarge, m7i.2xlarge, m7i.4xlarge, m7i.8xlarge, m7i.12xlarge, m7i.16xlarge, m7i.24xlarge, m7i.48xlarge, m7i-flex.large, m7i-flex.xlarge, m7i-flex.2xlarge, m7i-flex.4xlarge, m7i-flex.8xlarge, m6i.large, m6i.xlarge, m6i.2xlarge, m6i.4xlarge, m6i.8xlarge, m6i.12xlarge, m6i.16xlarge, m6i.24xlarge, m6i.32xlarge, m6i.metal, m6in.large, m6in.xlarge, m6in.2xlarge, m6in.4xlarge, m6in.8xlarge, m6in.12xlarge, m6in.16xlarge, m6in.24xlarge, m6in.32xlarge m6in.metal, m6id.large, m6id.xlarge, m6id.2xlarge, m6id.4xlarge, m6id.8xlarge, m6id.12xlarge, m6id.16xlarge, m6id.24xlarge, m6id.32xlarge m6id.metal, m6idn.large, m6idn.xlarge, m6idn.2xlarge, m6idn.4xlarge, m6idn.8xlarge, m6idn.12xlarge, m6idn.16xlarge, m6idn.24xlarge, m6idn.32xlarge m6idn.metal
 
 **Compute Optimized:** c6i.large, c6i.xlarge, c6i.2xlarge, c6i.4xlarge, c6i.8xlarge, c6i.12xlarge, c6i.16xlarge, c6i.24xlarge, c6i.32xlarge, c6i.metal, c6in.large, c6in.xlarge, c6in.2xlarge, c6in.4xlarge, c6in.8xlarge, c6in.12xlarge, c6in.16xlarge, c6in.24xlarge, c6in.32xlarge c6in.metal, c6id.large, c6id.xlarge, c6id.2xlarge, c6id.4xlarge, c6id.8xlarge, c6id.12xlarge, c6id.16xlarge, c6id.24xlarge, c6id.32xlarge c6id.metal, hpc6id.32.xlarge
 
