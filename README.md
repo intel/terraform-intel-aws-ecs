@@ -6,7 +6,7 @@
 
 # Intel® Optimized Cloud Modules for Terraform
 
-© Copyright 2024, Intel Corporation
+© Copyright 2025, Intel Corporation
 
 ## Amazon ECS Module
 In this module we create a ECS cluster utilizing the latest Intel Architecture available for the AWS ECS Service.  
